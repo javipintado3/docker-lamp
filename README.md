@@ -10,9 +10,10 @@ docker-lamp
 │  ├─ Dockerfile
 │  ├─ conf
 │  │  ├─ 000-default.conf
-│  │  └─ intranet.conf
+│  │  ├─ intranet.conf
+│  │  └─ javier-pintado-phpmyadmin.conf
 │  ├─ etc
-│  │  ├─ apache2
+│  │  └─ apache2
 │  └─ www
 │     ├─ index.html
 │     ├─ intranet
@@ -30,34 +31,37 @@ docker-lamp
    └─ dump
       └─ myDb.sql
 
+
 ```
 
 La estructura del proyecto `docker-lamp` es un entorno de desarrollo LAMP (Linux, Apache, MySQL, PHP) utilizando Docker. A continuación, se describen cada parte de la estructura:
+# Estructura del Proyecto
 
-- **.gitignore**: Este archivo indica a Git qué archivos o carpetas ignorar en el control de versiones, como archivos de configuración personales o directorios de compilación. En este caso ignoraremos el archivo con las variables de entorno .env
+- **.gitignore**: Archivo que especifica qué archivos o carpetas deben ser ignorados por Git, como configuraciones personales o archivos de compilación.
 
-- **LICENSE**: Contiene información sobre la licencia bajo la cual se distribuye el proyecto, especificando cómo se puede usar o modificar.
+- **LICENSE**: Contiene información sobre la licencia bajo la cual se distribuye el proyecto.
 
-- **README.md**: Incluye información sobre el proyecto, como descripciones, instrucciones de instalación, uso y créditos.
+- **README.md**: Documentación del proyecto, incluyendo descripciones, instrucciones de instalación y uso, y créditos.
 
-- **apache2-php/**: Esta carpeta contiene los archivos relacionados con el servidor web Apache y PHP.
-  - **Dockerfile**: Script de instrucciones para construir la imagen Docker para el servidor Apache con PHP.
-  - **conf/**: Contiene archivos de configuración para Apache.
-    - **000-default.conf**: La configuración predeterminada del Virtual Host para Apache.
-    - **intranet.conf**: La configuración del Virtual Host para la intranet, accesible en un puerto específico o subdominio.
-  - **etc/apache2/**: Contiene archivos de configuración adicionales para el directorio apache2.
-  - **www/**: Directorio que almacena los archivos del sitio web.
-    - **index.html**: Página de inicio para el sitio principal.
-    - **intranet/**: Carpeta que contiene los archivos para la sección de intranet del sitio.
-      - **index.html**: Página de inicio para la intranet.
+- **apache2-php/**: Carpeta que contiene archivos relacionados con el servidor web Apache y PHP.
+  - **Dockerfile**: Script de instrucciones para construir la imagen Docker del servidor Apache con PHP.
+  - **conf/**: Archivos de configuración para Apache.
+    - **000-default.conf**: Configuración predeterminada del Virtual Host para Apache.
+    - **intranet.conf**: Configuración del Virtual Host para la intranet.
+    - **javier-pintado-phpmyadmin.conf**: Configuración del Virtual Host para phpMyAdmin.
+  - **etc/apache2/**: Archivos de configuración adicionales para el directorio apache2.
+  - **www/**: Directorio que almacena archivos del sitio web.
+    - **index.html**: Página de inicio del sitio principal.
+    - **intranet/**: Carpeta con archivos para la sección de intranet del sitio.
+      - **index.html**: Página de inicio de la intranet.
     - **phpinfo.php**: Script PHP para mostrar información sobre la configuración de PHP.
     - **test-bd.php**: Script PHP para probar la conexión a la base de datos MySQL.
 
-- **dist/**: Contiene plantillas o archivos distribuibles, en este caso una versión de ejemplo del archivo `.env`.
-  - **env.dist**: Una plantilla para el archivo de variables de entorno.
-  - **htpasswd.dist**: Una plantilla para con usuario de ejemplo inicial para acceder a la intranet
+- **dist/**: Contiene plantillas o archivos distribuibles, como una versión de ejemplo del archivo .env.
+  - **env.dist**: Plantilla para el archivo de variables de entorno.
+  - **htpasswd.dist**: Plantilla con usuario de ejemplo para acceder a la intranet.
 
-- **docker-compose.yml**: Archivo YAML que define los servicios, redes y volúmenes para el proyecto, organizando y ejecutando múltiples contenedores Docker.
+- **docker-compose.yml**: Archivo YAML que define servicios, redes y volúmenes para el proyecto mediante Docker Compose.
 
 - **docs/**: Directorio destinado a contener documentación del proyecto.
   - **images/**: Imágenes utilizadas en la documentación.
@@ -65,7 +69,8 @@ La estructura del proyecto `docker-lamp` es un entorno de desarrollo LAMP (Linux
 - **mysql/**: Contiene configuraciones y datos relacionados con el servicio de base de datos MySQL.
   - **conf/**: Directorio para archivos de configuración personalizados de MySQL.
   - **dump/**: Contiene archivos de carga de bases de datos, como scripts SQL para inicializar la base de datos.
-    - **myDb.sql**: Un script SQL con lo necesario para inicializar la base de datos.
+    - **myDb.sql**: Script SQL para inicializar la base de datos.
+
 
 # Guía de Instalación del Proyecto Docker LAMP
 
@@ -76,9 +81,13 @@ Esta guía detalla los pasos para clonar y configurar un entorno Docker LAMP (Li
 Primero, clonar el repositorio Git:
 
 ```bash
-git clone [URL_DEL_REPOSITORIO]
+git clone https://github.com/antonio-gabriel-gonzalez-casado/docker-lamp/
 cd docker-lamp
 ```
+
+![Clonar repositorio](docs/images/clonar_repositorio.png)
+
+
 
 ##  Configurar Archivo .env
 
@@ -86,6 +95,12 @@ Copiar el archivo env.dist a .env y personaliza las variables de entorno:
 
 ```bash
 cp dist/env.dist .env
+```
+
+Ruta de la captura:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/copiar_archivo_env.png
 ```
 
 Editar el archivo .env estableciendo los siguientes valores:
@@ -98,17 +113,43 @@ MYSQL_ROOT_PASSWORD=test
 MYSQL_PORT=3307
 ```
 
+Ruta de la captura:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/copiar_archivo_env.png
+```
+
+
 Copiar el archivo htpasswd.dist a ./apache2-php/etc/apache2/ y añade usuarios para acceder a la intranet:
 
 ```bash
 cp dist/htpasswd.dist ./apache2-php/etc/apache2/.htpasswd
 ```
 
+Ruta de la captura:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/copiar_usuario.png
+```
+
+
 Los usuarios tiene el formato:
 ```
 usuario:contraseña
 ```
-La constraseña se puede generar con la utilidad de apache2-utils o directamente usando un [generador online](https://hellotools.org/es/generar-cifrar-contrasena-para-archivo-htpasswd)
+La constraseña la he generado con el siguiente comando:
+
+```bash
+htpasswd ./apache2-php/etc/apache2/.htpasswd javier-pintado
+```
+
+
+Ruta de la captura:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/images_pass.png
+```
+
 
 ## Construir las Imágenes
 
@@ -116,6 +157,12 @@ Construir las imágenes usando Docker Compose:
 
 ```bash
 docker-compose build
+```
+
+Ruta de la captura:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/docker-compose.png
 ```
 
 ## Iniciar los Contenedores
@@ -126,19 +173,31 @@ Arrancar los contenedores en modo detached:
 docker-compose up -d
 ```
 
+Ruta de la captura:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/docker-composeUp.png
+```
+
 ## Comprobaciones de Prueba
 
 ### Creación de un usuario adicional para acceder a la intranet:
 Para acceder a al intranet se necesita crear un archivo .htpasswd con los nombres de usuario y sus contraseñas. Se puede usar la herramienta htpasswd para esto. Para ello accede al contenedor daweb-docker-lamp-apache2 a través del terminal mediante el siguiente comando:
 
 ```
-docker exec -it daweb-docker-lamp-apache2
+docker exec -it daweb-docker-lamp-apache2 /bin/bash
 ```
 
 Lanzar el comando que crea un usuario llamado usuario2 y pedirá que se introduzca una contraseña:
 ```
 htpasswd /etc/apache2/.htpasswd usuario2
 ```
+Ruta de la captura:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/docker-exec.png
+```
+
 
 ### Prueba de los servicios:
 Para probar si los servicios están funcionando correctamente, acceder a los siguientes enlaces a través del navegador:
@@ -149,6 +208,36 @@ Para probar si los servicios están funcionando correctamente, acceder a los sig
 - **Prueba de Conexión a la Base de Datos**: [http://localhost/test-bd.php](http://localhost/test-bd.php)
 - **Prueba de phpmyadmin**: [http://localhost:8080 (con el usuario root y la contraseña establecida)](http://localhost:8080)
 
+Captura de prueba del sitio principal
+
+```
+Practica_Despliegue/docker-lamp/docs/images/SitioPrincipal.png
+```
+Captura de prueba de la intranet
+
+```
+Practica_Despliegue/docker-lamp/docs/images/Intranet.png
+```
+
+Captura de prueba de PHP Info
+
+```
+Practica_Despliegue/docker-lamp/docs/images/PHPinfo.png
+```
+
+Captura de conexión a la base de datos
+
+```
+Practica_Despliegue/docker-lamp/docs/images/bd.png
+```
+
+Capturas de prueba de phpmyadmin:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/loginPHP.png
+Practica_Despliegue/docker-lamp/docs/images/PHPMyAdmin.png
+```
+
 
 ## Detener los Contenedores
 Para detener y eliminar los contenedores:
@@ -157,19 +246,199 @@ Para detener y eliminar los contenedores:
 docker-compose down
 ```
 
-## (Opcional) Configuración
-Para acceder a las urls configuradas en los virtual host:
-- **Sitio Principal**: [http://www.local](http://www.local)
-- **Intranet**: [http://intranet.local:8060 (usando usuario1 y contraseña:123456789 o el usuario creado en el paso anterior)](http://intranet.local:8060)
-- **PHP Info**: [http://www.local/phpinfo.php](http://www.local/phpinfo.php)
-- **Conexión a la Base de Datos**: [http://www.local/test-bd.php](http://www.localtest-bd.php)
-- **Phpmyadmin**: [http://www.local:8080 (con el usuario root y la contraseña establecida)](http://www.local:8080)
+## Modifica el nombre de los virtualhost
 
-Hay que modificar el fichero **/etc/hosts** del sistema operativo anfitrión (no el contenedor de docker) y añadir las siguientes líneas:
+Abrimos el archivo default.conf para editarlo.
+
+```bash
+nano apache2-php/conf/000-default.conf 
 ```
-127.0.0.1	www.local
-127.0.0.1	intranet.local
+
+Cambiamos www.local a javier-pintado-www.local
+
+Captura con el resultado:
+
 ```
+Practica_Despliegue/docker-lamp/docs/images/local-javier-pintado.png
+```
+
+Ahora abrimos el archivo intranet.conf para editarlo. 
+
+```bash
+nano apache2-php/conf/intranet.con
+```
+
+Cambiamos intranet.local a javier-pintado-intranet.local
+
+Captura con el resultado:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/intranet-javier-pintado.png
+```
+
+## Crear un nuevo virtual host para el servicio phpmyadmin
+
+Cremos el archivo de configuración para phpMyAdmin:
+
+```bash
+nano apache2-php/conf/javier-pintado-phpmyadmin.conf
+```
+
+Agregamos el siguiente contenido al archivo, siguiendo las especificaciones indicadas:
+
+```
+<VirtualHost *:8081>
+    ServerName javier-pintado-phpmyadmin.local
+
+    <Location />
+        AuthType Basic
+        AuthName "Acceso restringido"
+        AuthUserFile /etc/apache2/.htpasswd
+        Require valid-user
+    </Location>
+
+    ProxyPreserveHost On
+    ProxyPass / http://phpmyadmin:80/
+    ProxyPassReverse / http://phpmyadmin:80/
+</VirtualHost>
+```
+
+Captura con el resultado:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/ConfiguracionPhpmyadmin.png
+```
+Abrimos el archivo apache2-php/Dockerfile para agregar las líneas necesarias para habilitar los módulos de proxy inverso:
+
+```bash
+nano apache2-php/Dockerfile
+```
+
+Añadiremos las siguientes lineas: 
+
+```
+# Activar el módulo de configuración del Virtual Host de phpMyAdmin
+RUN a2ensite javier-pintado-phpmyadmin.conf
+# Habilitar módulos de proxy inverso
+RUN a2enmod proxy proxy_http
+```
+
+Captura con el resultado:
+
+```
+Practica_Despliegue/docker-lamp/docs/images/apache-dockerFIle.png
+```
+
+Reconsutruimos las imagenes:
+
+```bash
+docker-compose build
+```
+
+Después de la reconstrucción, reinicia los contenedores:
+
+```bash
+docker-compose up -d
+```
+
+Capturas con los resultados:
+```
+Practica_Despliegue/docker-lamp/docs/images/resultado-dockercomposePhpadmin.png
+Practica_Despliegue/docker-lamp/docs/images/docker-compose-up.png
+```
+
+
+## Modificación del index.html de la intranet
+
+Abrimos el archivo index.html de la intranet:
+
+```bash
+nano apache2-php/www/intranet/index.html
+```
+
+Cambia el contenido del archivo con el código HTML de la nueva apariencia. Puedes copiar un código HTML de alguna plantilla "copyleft o free" que encuentres en Internet.
+
+Captura con el resultado:
+```
+Practica_Despliegue/docker-lamp/docs/images/indexhmtl.png
+```
+
+## Añadir un nuevo usuario a la lista de usuarios que puede acceder a la intranet
+
+Añadimos un nuevo usuario y le asignaremos la contraseña:
+
+```bash
+htpasswd apache2-php/etc/apache2/.htpasswd javier-pintado
+```
+
+Captura con el resultado:
+```
+Practica_Despliegue/docker-lamp/docs/images/añadirUsuarioIntranet.png
+```
+
+## Instalación de un CMS Wordpress
+
+Utilizaremos Docker para acceder al contenedor del servicio web donde está corriendo Apache y PHP.
+
+```bash
+docker exec -it daweb-docker-lamp-apache2 /bin/bash
+```
+
+Dentro del contenedor, navega al directorio donde se encuentra el sitio web.
+
+```bash
+cd /var/www/html
+```
+
+Descarga la última versión de WordPress:
+
+```bash
+curl -O https://wordpress.org/latest.tar.gz
+```
+
+Descomprime el archivo descargado:
+
+```bash
+tar -xzf latest.tar.gz
+```
+
+Captura con el resultado:
+```
+Practica_Despliegue/docker-lamp/docs/images/DownloaodWordpress.png
+```
+
+Entra al directorio de WordPress:
+
+```bash
+cd /var/www/html/wordpress
+```
+
+Copia el archivo de configuración de ejemplo:
+
+```bash
+cp wp-config-sample.php wp-config.php
+```
+
+Abre el archivo de configuración en un editor de texto para editarlo:
+
+```bash
+nano wp-config.php
+```
+
+Configura la base de datos proporcionando la información correcta en las siguientes líneas:
+
+```
+define( 'DB_NAME', 'myDb' );
+define( 'DB_USER', 'root' );
+define( 'DB_PASSWORD', 'root' );
+define( 'DB_HOST', 'localhost' );
+```
+
+Captura con el resultado:
+```
+Practica_Despliegue/docker-lamp/docs/images/ConfiguracionWorpressBD.png
+```
+
 ## Instalación de Certificados SSL
 
 ### Generación de Certificados
@@ -188,6 +457,8 @@ Lanzar el comando de generación de certificados de openssl:
 ```bash
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout www.key -out www.crt
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout intranet.key -out intranet.crt
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nombre-apellidos-phpmyadmin.key -out nombre-apellidos-phpmyadmin.crt
+
 ```
 
 Este comando crea un certificado (crt) y una clave privada (key) válidos por 365 días.
@@ -221,7 +492,23 @@ En cada archivo de configuración agregar una regla como esta replicando la conf
     SSLCertificateFile /etc/apache2/ssl/intranet.crt
     SSLCertificateKeyFile /etc/apache2/ssl/intranet.key
 </VirtualHost>
+
+<VirtualHost *:443>
+    ServerName javier-pintado-phpmyadmin.local
+    SSLEngine on
+    SSLCertificateFile /etc/apache2/ssl/javier-pintado-phpmyadmin.crt
+    SSLCertificateKeyFile /etc/apache2/ssl/javier-pintado-phpmyadmin.key
+</VirtualHost>
+
 ```
+
+Capturas con el resultado:
+```
+Practica_Despliegue/docker-lamp/docs/images/certificado1.png
+Practica_Despliegue/docker-lamp/docs/images/certificado2.png
+Practica_Despliegue/docker-lamp/docs/images/certificado3.png
+```
+
 
 ### Habilitar el módulo mod_ssl
 
@@ -238,11 +525,9 @@ Además se debe habilitar el módulo ssl, para ello agregar la siguiente línea:
 RUN a2enmod ssl
 ```
 
+Capturas con el resultado:
+```
+Practica_Despliegue/docker-lamp/docs/images/modulomod.png
+```
 
-## (Opcional) Configuración
-Para acceder a las urls configuradas en los virtual host:
-- **Sitio Principal**: [https://www.local](https://www.local)
-- **Intranet**: [https://intranet.local (usando usuario1 y contraseña:123456789 o el usuario creado en el paso anterior)](https://intranet.local)
-- **PHP Info**: [https://www.local/phpinfo.php](https://www.local/phpinfo.php)
-- **Conexión a la Base de Datos**: [https://www.local/test-bd.php](https://www.localtest-bd.php)
 

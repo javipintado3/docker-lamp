@@ -25,3 +25,15 @@ COPY ./etc/apache2/.htpasswd /etc/apache2/.htpasswd
 
 # Habilitar los virtual hosts
 RUN a2ensite intranet.conf
+
+# Activar el módulo de configuración del Virtual Host de phpMyAdmin
+RUN a2ensite javier-pintado-phpmyadmin.conf
+
+# Habilitar módulos de proxy inverso
+RUN a2enmod proxy proxy_http
+
+# Copiar archivos de certificados
+COPY ../certs/ etc/apache2/ssl
+
+RUN a2enmod ssl
+
