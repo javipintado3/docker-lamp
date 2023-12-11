@@ -88,7 +88,6 @@ cd docker-lamp
 ![Clonar repositorio](docs/images/clonar_repositorio.png)
 
 
-
 ##  Configurar Archivo .env
 
 Copiar el archivo env.dist a .env y personaliza las variables de entorno:
@@ -97,11 +96,8 @@ Copiar el archivo env.dist a .env y personaliza las variables de entorno:
 cp dist/env.dist .env
 ```
 
-Ruta de la captura:
+![Copiar env](docs/images/copiar_archivo_env.png)
 
-```
-Practica_Despliegue/docker-lamp/docs/images/copiar_archivo_env.png
-```
 
 Editar el archivo .env estableciendo los siguientes valores:
 
@@ -113,11 +109,7 @@ MYSQL_ROOT_PASSWORD=test
 MYSQL_PORT=3307
 ```
 
-Ruta de la captura:
-
-```
-Practica_Despliegue/docker-lamp/docs/images/copiar_archivo_env.png
-```
+![Copiar env](docs/images/editar_env.png)
 
 
 Copiar el archivo htpasswd.dist a ./apache2-php/etc/apache2/ y añade usuarios para acceder a la intranet:
@@ -126,11 +118,7 @@ Copiar el archivo htpasswd.dist a ./apache2-php/etc/apache2/ y añade usuarios p
 cp dist/htpasswd.dist ./apache2-php/etc/apache2/.htpasswd
 ```
 
-Ruta de la captura:
-
-```
-Practica_Despliegue/docker-lamp/docs/images/copiar_usuario.png
-```
+![Copiar env](docs/images/copiar_usuario.png)
 
 
 Los usuarios tiene el formato:
@@ -144,11 +132,7 @@ htpasswd ./apache2-php/etc/apache2/.htpasswd javier-pintado
 ```
 
 
-Ruta de la captura:
-
-```
-Practica_Despliegue/docker-lamp/docs/images/images_pass.png
-```
+![Copiar env](docs/images/images_pass.png)
 
 
 ## Construir las Imágenes
@@ -159,11 +143,8 @@ Construir las imágenes usando Docker Compose:
 docker-compose build
 ```
 
-Ruta de la captura:
+![Copiar env](docs/images/docker-compose.png)
 
-```
-Practica_Despliegue/docker-lamp/docs/images/docker-compose.png
-```
 
 ## Iniciar los Contenedores
 
@@ -173,11 +154,8 @@ Arrancar los contenedores en modo detached:
 docker-compose up -d
 ```
 
-Ruta de la captura:
+![Copiar env](docs/images/docker-composeUp.png)
 
-```
-Practica_Despliegue/docker-lamp/docs/images/docker-composeUp.png
-```
 
 ## Comprobaciones de Prueba
 
@@ -192,51 +170,23 @@ Lanzar el comando que crea un usuario llamado usuario2 y pedirá que se introduz
 ```
 htpasswd /etc/apache2/.htpasswd usuario2
 ```
-Ruta de la captura:
-
-```
-Practica_Despliegue/docker-lamp/docs/images/docker-exec.png
-```
+![Exec](docs/images/docker-exec.png)
 
 
 ### Prueba de los servicios:
 Para probar si los servicios están funcionando correctamente, acceder a los siguientes enlaces a través del navegador:
 
 - **Prueba del sitio principal**: [http://localhost](http://localhost)
+  ![Sitio Principal](docs/images/SitioPrincipal.png)
 - **Prueba de la intranet**: [http://localhost:8060 (usando usuario1 y contraseña:123456789 o el usuario creado en el paso anterior)](http://localhost:8060)
+  ![Prueba de la intranet](docs/images/Intranet.png)
 - **Prueba de PHP Info**: [http://localhost/phpinfo.php](http://localhost/phpinfo.php)
+  ![Prueba de PHP Info](docs/images/PHPinfo.png)
 - **Prueba de Conexión a la Base de Datos**: [http://localhost/test-bd.php](http://localhost/test-bd.php)
+  ![Prueba de BD](docs/images/bd.png)
 - **Prueba de phpmyadmin**: [http://localhost:8080 (con el usuario root y la contraseña establecida)](http://localhost:8080)
-
-Captura de prueba del sitio principal
-
-```
-Practica_Despliegue/docker-lamp/docs/images/SitioPrincipal.png
-```
-Captura de prueba de la intranet
-
-```
-Practica_Despliegue/docker-lamp/docs/images/Intranet.png
-```
-
-Captura de prueba de PHP Info
-
-```
-Practica_Despliegue/docker-lamp/docs/images/PHPinfo.png
-```
-
-Captura de conexión a la base de datos
-
-```
-Practica_Despliegue/docker-lamp/docs/images/bd.png
-```
-
-Capturas de prueba de phpmyadmin:
-
-```
-Practica_Despliegue/docker-lamp/docs/images/loginPHP.png
-Practica_Despliegue/docker-lamp/docs/images/PHPMyAdmin.png
-```
+  ![Login PHP](docs/images/loginPHP.png)
+  ![Prueba de PHPMyadmin](docs/images/PHPMyAdmin.png)
 
 
 ## Detener los Contenedores
@@ -256,11 +206,7 @@ nano apache2-php/conf/000-default.conf
 
 Cambiamos www.local a javier-pintado-www.local
 
-Captura con el resultado:
-
-```
-Practica_Despliegue/docker-lamp/docs/images/local-javier-pintado.png
-```
+![Cambio de nombre local](docs/images/local-javier-pintado.png)
 
 Ahora abrimos el archivo intranet.conf para editarlo. 
 
@@ -270,11 +216,7 @@ nano apache2-php/conf/intranet.con
 
 Cambiamos intranet.local a javier-pintado-intranet.local
 
-Captura con el resultado:
-
-```
-Practica_Despliegue/docker-lamp/docs/images/intranet-javier-pintado.png
-```
+![Cambio de intranet local](docs/images/intranet-javier-pintado.png)
 
 ## Crear un nuevo virtual host para el servicio phpmyadmin
 
@@ -303,11 +245,9 @@ Agregamos el siguiente contenido al archivo, siguiendo las especificaciones indi
 </VirtualHost>
 ```
 
-Captura con el resultado:
+![Archivo de configuracion](docs/images/ConfiguracionPhpmyadmin.png)
 
-```
-Practica_Despliegue/docker-lamp/docs/images/ConfiguracionPhpmyadmin.png
-```
+
 Abrimos el archivo apache2-php/Dockerfile para agregar las líneas necesarias para habilitar los módulos de proxy inverso:
 
 ```bash
@@ -323,11 +263,7 @@ RUN a2ensite javier-pintado-phpmyadmin.conf
 RUN a2enmod proxy proxy_http
 ```
 
-Captura con el resultado:
-
-```
-Practica_Despliegue/docker-lamp/docs/images/apache-dockerFIle.png
-```
+![Cambio de nombre local](docs/images/apache-dockerFIle.png)
 
 Reconsutruimos las imagenes:
 
@@ -335,18 +271,14 @@ Reconsutruimos las imagenes:
 docker-compose build
 ```
 
+![Docker compose build](docs/images/resultado-dockercomposePhpadmin.png)
+
 Después de la reconstrucción, reinicia los contenedores:
 
 ```bash
 docker-compose up -d
 ```
-
-Capturas con los resultados:
-```
-Practica_Despliegue/docker-lamp/docs/images/resultado-dockercomposePhpadmin.png
-Practica_Despliegue/docker-lamp/docs/images/docker-compose-up.png
-```
-
+![Docker compose up](docs/images/docker-compose-up.png)
 
 ## Modificación del index.html de la intranet
 
@@ -358,10 +290,7 @@ nano apache2-php/www/intranet/index.html
 
 Cambia el contenido del archivo con el código HTML de la nueva apariencia. Puedes copiar un código HTML de alguna plantilla "copyleft o free" que encuentres en Internet.
 
-Captura con el resultado:
-```
-Practica_Despliegue/docker-lamp/docs/images/indexhmtl.png
-```
+![Index](docs/images/indexhmtl.png)
 
 ## Añadir un nuevo usuario a la lista de usuarios que puede acceder a la intranet
 
@@ -371,10 +300,7 @@ Añadimos un nuevo usuario y le asignaremos la contraseña:
 htpasswd apache2-php/etc/apache2/.htpasswd javier-pintado
 ```
 
-Captura con el resultado:
-```
-Practica_Despliegue/docker-lamp/docs/images/añadirUsuarioIntranet.png
-```
+![AñadirUsuario](docs/images/añadirUsuarioIntranet.png):
 
 ## Instalación de un CMS Wordpress
 
@@ -402,10 +328,8 @@ Descomprime el archivo descargado:
 tar -xzf latest.tar.gz
 ```
 
-Captura con el resultado:
-```
-Practica_Despliegue/docker-lamp/docs/images/DownloaodWordpress.png
-```
+![Descargar wordpress](docs/images/DownloaodWordpress.png)
+
 
 Entra al directorio de WordPress:
 
@@ -434,10 +358,8 @@ define( 'DB_PASSWORD', 'root' );
 define( 'DB_HOST', 'localhost' );
 ```
 
-Captura con el resultado:
-```
-Practica_Despliegue/docker-lamp/docs/images/ConfiguracionWorpressBD.png
-```
+![Docker compose up](docs/images/ConfiguracionWorpressBD.png)
+
 
 ## Instalación de Certificados SSL
 
@@ -502,12 +424,10 @@ En cada archivo de configuración agregar una regla como esta replicando la conf
 
 ```
 
-Capturas con el resultado:
-```
-Practica_Despliegue/docker-lamp/docs/images/certificado1.png
-Practica_Despliegue/docker-lamp/docs/images/certificado2.png
-Practica_Despliegue/docker-lamp/docs/images/certificado3.png
-```
+![Certificado1](docs/images/certificado1.png)
+![Certificado2](docs/images/certificado2.png)
+![Certificado3](docs/images/certificado3.png)
+
 
 
 ### Habilitar el módulo mod_ssl
@@ -525,9 +445,7 @@ Además se debe habilitar el módulo ssl, para ello agregar la siguiente línea:
 RUN a2enmod ssl
 ```
 
-Capturas con el resultado:
-```
-Practica_Despliegue/docker-lamp/docs/images/modulomod.png
-```
+![modulo](docs/images/modulomod.png)
+
 
 
