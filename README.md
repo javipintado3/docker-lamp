@@ -208,6 +208,8 @@ Cambiamos www.local a javier-pintado-www.local
 
 ![Cambio de nombre local](docs/images/local-javier-pintado.png)
 
+![www.local Resultado](docs/images/localResultado.png)
+
 Ahora abrimos el archivo intranet.conf para editarlo. 
 
 ```bash
@@ -217,6 +219,8 @@ nano apache2-php/conf/intranet.con
 Cambiamos intranet.local a javier-pintado-intranet.local
 
 ![Cambio de intranet local](docs/images/intranet-javier-pintado.png)
+
+![intranet Resultado](docs/images/IntranetResultado.png)
 
 ## Crear un nuevo virtual host para el servicio phpmyadmin
 
@@ -291,6 +295,8 @@ nano apache2-php/www/intranet/index.html
 Cambia el contenido del archivo con el código HTML de la nueva apariencia. Puedes copiar un código HTML de alguna plantilla "copyleft o free" que encuentres en Internet.
 
 ![Index](docs/images/indexhmtl.png)
+![Resultado del index](docs/images/resultadoIndex.png)
+
 
 ## Añadir un nuevo usuario a la lista de usuarios que puede acceder a la intranet
 
@@ -352,13 +358,21 @@ nano wp-config.php
 Configura la base de datos proporcionando la información correcta en las siguientes líneas:
 
 ```
-define( 'DB_NAME', 'myDb' );
-define( 'DB_USER', 'root' );
+define( 'DB_NAME', 'wordpress' );
+define( 'DB_USER', 'wordpress' );
 define( 'DB_PASSWORD', 'root' );
 define( 'DB_HOST', 'localhost' );
 ```
 
-![Docker compose up](docs/images/ConfiguracionWorpressBD.png)
+![Docker compose up](docs/images/bdWordpress.png)
+
+En phpMyAdmin agregaremos un nuevo usuario wordpress con la bd creada:
+
+![Asigncacion de usuario](docs/images/AgregarCuentaWordpress.png)
+
+Resultado:
+
+![Wordpress](docs/images/ResultadoWordpress.png)
 
 
 ## Instalación de Certificados SSL
